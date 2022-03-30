@@ -1,0 +1,16 @@
+# AWSテンプレートのバージョン。2022.1時点で唯一のバージョン
+AWSTemplateFormatVersion: "2010-09-09"
+# テンプレートの説明。実行時に表示されるので記載
+Description: AWS-Study(create VPC only)
+# リソース定義。
+Resources:
+  # VPC
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.1.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: aws-study-vpc
