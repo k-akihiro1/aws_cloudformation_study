@@ -49,7 +49,7 @@ Resources:
         - Key: Name
           Value: aws-study-pubsubnet-2a
   #oregon-2c
-  PublicSubnet-1c:
+  PublicSubnet-2c:
     Type: AWS::EC2::Subnet
     Properties:
       CidrBlock: 10.1.2.0/24
@@ -59,7 +59,7 @@ Resources:
         - Key: Name
           Value: aws-study-pubsubnet-2c
 
-  PrivateSubnet-1c:
+  PrivateSubnet-2c:
     Type: AWS::EC2::Subnet
     Properties:
       CidrBlock: 10.1.3.0/24
@@ -68,3 +68,49 @@ Resources:
       Tags:
         - Key: Name
           Value: aws-study-prisubnet-2c
+
+  # RouteTable(PublicSubnet2a)
+  # ルートテーブルの作成(VPCを指定)
+  RouteTableForPublicSubnet-2a:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: RouteTableForPublicSubnet-2a
+  # ルートの定義
+  RouteForPublicSubnet-2a:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnet-2a
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  # ルートテーブルとサブネットの紐付け
+  AssocciateRouteTableForPublicSubnet-2a:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnet-2a
+      SubnetId: !Ref PublicSubnet-2a
+
+  # RouteTable(PublicSubnet2c)
+  # ルートテーブルの作成(VPCを指定)
+  RouteTableForPublicSubnet-2c:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: RouteTableForPublicSubnet-2c
+  # ルートの定義
+  RouteForPublicSubnet-2a:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnet-2c
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  # ルートテーブルとサブネットの紐付け
+  AssocciateRouteTableForPublicSubnet-2a:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnet-2c
+      SubnetId: !Ref PublicSubnet-2c
