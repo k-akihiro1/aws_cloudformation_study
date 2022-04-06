@@ -69,7 +69,7 @@ Resources:
         - Key: Name
           Value: aws-study-prisubnet-2c
 
-  # RouteTable(PublicSubnet2a)
+  # RouteTable(PublicSubnet-2a)
   # ルートテーブルの作成(VPCを指定)
   RouteTableForPublicSubnet-2a:
     Type: AWS::EC2::RouteTable
@@ -92,7 +92,7 @@ Resources:
       RouteTableId: !Ref RouteTableForPublicSubnet-2a
       SubnetId: !Ref PublicSubnet-2a
 
-  # RouteTable(PublicSubnet2c)
+  # RouteTable(PublicSubnet-2c)
   # ルートテーブルの作成(VPCを指定)
   RouteTableForPublicSubnet-2c:
     Type: AWS::EC2::RouteTable
@@ -115,7 +115,6 @@ Resources:
       RouteTableId: !Ref RouteTableForPublicSubnet-2c
       SubnetId: !Ref PublicSubnet-2c
 
-
   # EIP for NatGateway
   NatGatewayEIP:
     Type: AWS::EC2::EIP
@@ -133,3 +132,25 @@ Resources:
       Tags:
         - Key: Name
           Value: NatGateway
+  # RouteTable(PrivateSubnet-2c)
+  # ルートテーブルの作成(VPCを指定)
+  RouteTableForPrivateSubnet-2c:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: RouteTableForPrivateSubnet-2c
+  # ルートの定義（NatGateway）
+  RouteForPrivateSubnet-2c:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTableForPrivateSubnet-2c
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref NatGateway
+  # ルートテーブルとサブネットの紐付け
+  AssocciateRouteTableForPrivateSubnet-2c:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTableForPrivateSubnet-2c
+      SubnetId: !Ref PrivateSubnet-2c
