@@ -68,3 +68,26 @@ Resources:
       Tags:
         - Key: Name
           Value: aws-study-prisubnet-2c
+
+  # RouteTable(PublicSubnet)
+  # ルートテーブルの作成(VPCを指定)
+  RouteTableForPublicSubnet-2a:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: RouteTableForPublicSubnet-2a
+  # ルートの定義
+  RouteForPublicSubnet-2a:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnet-2a
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+  # ルートテーブルとサブネットの紐付け
+  AssocciateRouteTableForPublicSubnet-2a:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTableForPublicSubnet-2a
+      SubnetId: !Ref PublicSubnet-2a
