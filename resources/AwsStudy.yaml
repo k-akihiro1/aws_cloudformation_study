@@ -114,3 +114,22 @@ Resources:
     Properties:
       RouteTableId: !Ref RouteTableForPublicSubnet-2c
       SubnetId: !Ref PublicSubnet-2c
+
+
+  # EIP for NatGateway
+  NatGatewayEIP:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+  # NatGateway
+  NatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - NatGatewayEIP
+          - AllocationId
+      SubnetId: !Ref PublicSubnet-2a
+      Tags:
+        - Key: Name
+          Value: NatGateway
