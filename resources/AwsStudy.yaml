@@ -219,13 +219,109 @@ Resources:
         - Key: Name
           Value: aws-study-securityGroup-ec2
 
+  # EC2
+  # sub2a
+  EC2-web-1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      SubnetId: !Ref PublicSubnet-2a
+      DisableApiTermination: false
+      InstanceInitiatedShutdownBehavior: stop
+      KeyName:
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref SecurityGroupEC2
+      Tags:
+        - Key: Name
+          Value: web-1
+  EC2-ansible:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      SubnetId: !Ref PublicSubnet-2a
+      DisableApiTermination: false
+      InstanceInitiatedShutdownBehavior: stop
+      KeyName:
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref SecurityGroupEC2
+      Tags:
+        - Key: Name
+          Value: ansible
+  # sub2c
+  EC2-web-2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      SubnetId: !Ref PublicSubnet-2c
+      DisableApiTermination: false
+      InstanceInitiatedShutdownBehavior: stop
+      KeyName:
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref SecurityGroupEC2
+      Tags:
+        - Key: Name
+          Value: web-2
+  EC2-ap:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      SubnetId: !Ref PublicSubnet-2c
+      DisableApiTermination: false
+      InstanceInitiatedShutdownBehavior: stop
+      KeyName:
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref SecurityGroupEC2
+      Tags:
+        - Key: Name
+          Value: ap
+  EC2-int1:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      SubnetId: !Ref PrivateSubnet-2c
+      DisableApiTermination: false
+      InstanceInitiatedShutdownBehavior: stop
+      KeyName:
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref SecurityGroupEC2
+      Tags:
+        - Key: Name
+          Value: int1
+  EC2-int2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      SubnetId: !Ref PrivateSubnet-2c
+      DisableApiTermination: false
+      InstanceInitiatedShutdownBehavior: stop
+      KeyName:
+      Monitoring: false
+      SecurityGroupIds:
+        - !Ref SecurityGroupEC2
+      Tags:
+        - Key: Name
+          Value: int2
+
+
+
 # 今後やること
 # インスタンスの作成(鍵を使用しない、使用する)
   # sub2a
   # - web-1
   # - ansible
-  # - web-2
   # sub2c
+  # - web-2
   # - ap
   # - int1
   # - int2
