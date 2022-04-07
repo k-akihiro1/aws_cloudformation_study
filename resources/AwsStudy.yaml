@@ -102,14 +102,14 @@ Resources:
         - Key: Name
           Value: RouteTableForPublicSubnet-2c
   # ルートの定義
-  RouteForPublicSubnet-2a:
+  RouteForPublicSubnet-2c:
     Type: AWS::EC2::Route
     Properties:
       RouteTableId: !Ref RouteTableForPublicSubnet-2c
       DestinationCidrBlock: 0.0.0.0/0
       GatewayId: !Ref InternetGateway
   # ルートテーブルとサブネットの紐付け
-  AssocciateRouteTableForPublicSubnet-2a:
+  AssocciateRouteTableForPublicSubnet-2c:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties:
       RouteTableId: !Ref RouteTableForPublicSubnet-2c
@@ -154,3 +154,80 @@ Resources:
     Properties:
       RouteTableId: !Ref RouteTableForPrivateSubnet-2c
       SubnetId: !Ref PrivateSubnet-2c
+
+    # SecurityGroup
+  SecurityGroupEC2:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: AWS Study EC2
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        # HTTP:apache いらない？？
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        # HTTPS:apache
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+        # MYSQL/Aurora：MariaDB
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+        # DND(TCP):Bind  なんで２つ作成
+        - IpProtocol: tcp
+          FromPort: 53
+          ToPort: 53
+          CidrIp: 0.0.0.0/0
+        # TCP:Bind　　　なんでipを指定
+        - IpProtocol: udp
+          FromPort: 53
+          ToPort: 53
+          CidrIp: 0.0.0.0/0
+        # カスタムTCP:zabbix
+        - IpProtocol: tcp
+          FromPort: 10050
+          ToPort: 10050
+          CidrIp: 0.0.0.0/0
+        # カスタムTCP:zabbix_agent
+        - IpProtocol: tcp
+          FromPort: 10051
+          ToPort: 10051
+          CidrIp: 0.0.0.0/0
+        # SMTP:Postfix
+        - IpProtocol: smtp
+          FromPort: 25
+          ToPort: 25
+          CidrIp: 0.0.0.0/0
+        # カスタムUDP:NTP
+        - IpProtocol: udp
+          FromPort: 123
+          ToPort: 123
+          CidrIp: 0.0.0.0/0
+        # NFS:NFS
+        - IpProtocol: tcp
+          FromPort: 2049
+          ToPort: 2049
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: aws-study-securityGroup-ec2
+
+# 今後やること
+# インスタンスの作成(鍵を使用しない、使用する)
+  # sub2a
+  # - web-1
+  # - ansible
+  # - web-2
+  # sub2c
+  # - ap
+  # - int1
+  # - int2
+# ELBの作成（HTTPS化）
+# Rourte53の設定（ドメイン等）
