@@ -161,6 +161,7 @@ Resources:
     Properties:
       GroupDescription: AWS Study EC2
       VpcId: !Ref VPC
+      # Rule
       SecurityGroupIngress:
         # HTTP:apache いらない？？
         - IpProtocol: tcp
@@ -313,6 +314,31 @@ Resources:
         - Key: Name
           Value: int2
 
+  # ALB
+  # SG for ALB
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupName: ALBSecurityGroup
+      GroupDescription: AWS Study ALB
+      Tags:
+        - Key: Name
+          Value: ALBSecurityGroup
+  # Rule
+    SecurityGroupIngress:
+      #HTTP
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      #HTTPS
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        CidrIp: 0.0.0.0/0
+
+
 
 
 # 今後やること
@@ -327,3 +353,4 @@ Resources:
   # - int2
 # ELBの作成（HTTPS化）
 # Rourte53の設定（ドメイン等）
+# EIPの設定
