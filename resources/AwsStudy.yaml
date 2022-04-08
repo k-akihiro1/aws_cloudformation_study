@@ -374,6 +374,15 @@ Resources:
         - Id: !Ref EC2-web-1
         - Id: !Ref EC2-web-2
           Port: 80
+  ALBListener:
+  Type: AWS::ElasticLoadBalancingV2::Listener
+  Properties:
+    LoadBalancerArn: !Ref ELB
+    DefaultActions:
+      - TargetGroupArn: !Ref ALBTargetGroup
+        Type: forward
+    Port: 80
+    Protocol: HTTP
 
 
 # 今後やること
