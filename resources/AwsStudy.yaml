@@ -325,20 +325,30 @@ Resources:
       Tags:
         - Key: Name
           Value: ALBSecurityGroup
-  # Rule
+    # Rule
     SecurityGroupIngress:
-      #HTTP
+      # HTTP
       - IpProtocol: tcp
         FromPort: 80
         ToPort: 80
         CidrIp: 0.0.0.0/0
-      #HTTPS
+      # HTTPS
       - IpProtocol: tcp
         FromPort: 443
         ToPort: 443
         CidrIp: 0.0.0.0/0
-
-
+  ALB:
+  Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  Properties:
+    Name: aws-study-alb
+    SecurityGroups:
+      - !Ref ALBSecurityGroup
+    Subnets:
+      - !Ref PublicSubnet-2a
+      - !Ref PublicSubnet-2a
+    Tags:
+      - Key: Name
+        Value: aws-study-elb
 
 
 # 今後やること
