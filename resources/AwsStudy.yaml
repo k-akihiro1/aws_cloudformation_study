@@ -349,6 +349,31 @@ Resources:
     Tags:
       - Key: Name
         Value: aws-study-elb
+  # TargetGroup for ALB
+  ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: aws-study-elb-target-group
+      Port: 80
+      Protocol: HTTP
+      VpcId: !Ref VPC
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      HealthCheckTimeoutSeconds: 5
+      HealthCheckProtocol: HTTP
+      HealthCheckPath: "/"
+      HealthCheckPort: "traffic-port"
+      HealthCheckIntervalSeconds: 10
+      # いる???
+      Matcher:
+        HttpCode: 200
+      Tags:
+        - Key: Name
+          Value: aws-study-elb-target-group
+      Targets:
+        - Id: !Ref EC2-web-1
+        - Id: !Ref EC2-web-2
+          Port: 80
 
 
 # 今後やること
