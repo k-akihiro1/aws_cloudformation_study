@@ -161,6 +161,7 @@ Resources:
     Properties:
       GroupDescription: AWS Study EC2
       VpcId: !Ref VPC
+      # Rule
       SecurityGroupIngress:
         # HTTP:apache いらない？？
         - IpProtocol: tcp
@@ -313,6 +314,75 @@ Resources:
         - Key: Name
           Value: int2
 
+  # ALB
+  # SG for ALB
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      VpcId: !Ref VPC
+      GroupName: ALBSecurityGroup
+      GroupDescription: AWS Study ALB
+      Tags:
+        - Key: Name
+          Value: ALBSecurityGroup
+    # Rule
+    SecurityGroupIngress:
+      # HTTP
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      # HTTPS
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        CidrIp: 0.0.0.0/0
+  ALB:
+  Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  Properties:
+    Name: aws-study-alb
+    SecurityGroups:
+      - !Ref ALBSecurityGroup
+    Subnets:
+      - !Ref PublicSubnet-2a
+      - !Ref PublicSubnet-2a
+    Tags:
+      - Key: Name
+        Value: aws-study-elb
+  # TargetGroup for ALB
+  ALBTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: aws-study-elb-target-group
+      Port: 80
+      Protocol: HTTP
+      VpcId: !Ref VPC
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 2
+      HealthCheckTimeoutSeconds: 5
+      HealthCheckProtocol: HTTP
+      HealthCheckPath: "/"
+      HealthCheckPort: "traffic-port"
+      HealthCheckIntervalSeconds: 10
+      # いる???
+      Matcher:
+        HttpCode: 200
+      Tags:
+        - Key: Name
+          Value: aws-study-elb-target-group
+      Targets:
+        - Id: !Ref EC2-web-1
+        - Id: !Ref EC2-web-2
+          Port: 80
+  ALBListener:
+  Type: AWS::ElasticLoadBalancingV2::Listener
+  Properties:
+    LoadBalancerArn: !Ref ELB
+    DefaultActions:
+      - TargetGroupArn: !Ref ALBTargetGroup
+        Type: forward
+    Port: 80
+    Protocol: HTTP
 
 
 # 今後やること
@@ -327,3 +397,4 @@ Resources:
   # - int2
 # ELBの作成（HTTPS化）
 # Rourte53の設定（ドメイン等）
+# EIPの設定
